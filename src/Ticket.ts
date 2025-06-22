@@ -12,7 +12,7 @@ import type { TicketQueue } from './TicketQueue.js'
  */
 export class Ticket implements Disposable {
   public readonly [Symbol.toStringTag] = 'Ticket'
-  public readonly [Symbol.dispose] = this.removeFromQueue.bind(
+  public readonly [Symbol.dispose]: () => void = this.removeFromQueue.bind(
     this,
     'Explicit Resource Management',
   )
