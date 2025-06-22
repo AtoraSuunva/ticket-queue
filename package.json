@@ -1,6 +1,6 @@
 {
   "name": "ticket-queue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A ticket-based queue system to synchronize based on ticket acquisition order.",
   "repository": {
     "type": "git",
