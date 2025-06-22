@@ -1,0 +1,14 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@atorasuunva/ticket-queue",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./index.ts",
+  "publish": {
+    "include": [
+      "src/**/*.ts",
+      "README.md",
+      "LICENSE.md"
+    ]
+  }
+}
