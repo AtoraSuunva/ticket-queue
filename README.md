@@ -9,6 +9,28 @@ In other words, a function can get a ticket without waiting or blocking, perform
 
 Tickets are Disposable (see [Explicit Resource Management](https://github.com/tc39/proposal-explicit-resource-management)) which allows tickets to automatically get removed from the queue once they go out of scope—including if the code errors. Explicit resource management is not _required_ but is highly _recommended_ since it avoids stalling the ticket queue!
 
+[Documentation](https://jsr.io/@atorasuunva/ticket-queue/doc)
+
+## Install
+
+> [!WARN]
+> This is an ESM-only package. If you're using Common.js you will have to figure out your own way to import it.
+> Node.js is the only actually-actively maintained runtime (I don't have time for others 😔) but I will accept issues or PRs relating to other runtimes (bug reports, fixes, and CI support are welcome!)
+
+```sh
+# Node.js -> Pick your favorite:
+npm i ticket-queue
+npx jsr add @atorasuunva/ticket-queue
+pnpm i ticket-queue
+pnpm i jsr:@atorasuunva/ticket-queue
+
+# Deno
+deno add jsr:@atorasuunva/ticket-queue
+
+# Bun
+bunx jsr add @atorasuunva/ticket-queue
+```
+
 ## Usage
 
 ```typescript
