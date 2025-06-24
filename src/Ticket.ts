@@ -12,10 +12,6 @@ import type { TicketQueue } from './TicketQueue.js'
  */
 export class Ticket implements Disposable {
   public readonly [Symbol.toStringTag] = 'Ticket'
-  public readonly [Symbol.dispose]: () => void = this.removeFromQueue.bind(
-    this,
-    'Explicit Resource Management',
-  )
   public disposed = false
   public retries = 0
 
@@ -54,5 +50,14 @@ export class Ticket implements Disposable {
 
     this.ticketQueue.removeTicket(this, reason)
     this.disposed = true
+  }
+
+  /**
+   * Disposes of the ticket, removing it from the queue.
+   *
+   * This method is automatically called when the ticket goes out of scope when used with a `using` statement.
+   */
+  [Symbol.dispose]() {
+    this.removeFromQueue('Explicit Resource Management')
   }
 }
