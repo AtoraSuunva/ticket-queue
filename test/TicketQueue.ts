@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict'
 import { beforeEach, describe, it } from 'node:test'
-import type { Ticket } from '../src/Ticket.js'
-import { TicketQueue } from '../src/TicketQueue.js'
-import { nextEventCycle } from './utils.js'
+import type { Ticket } from '../src/Ticket.ts'
+import { TicketQueue } from '../src/TicketQueue.ts'
+import { nextEventCycle } from './utils.ts'
 
 describe('TicketQueue', () => {
   let queue: TicketQueue

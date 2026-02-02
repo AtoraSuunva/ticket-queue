@@ -42,16 +42,16 @@ const ticketQueue = new TicketQueue()
 async function onEvent(name) {
   using ticket = ticketQueue.acquireTicket()
 
-  // Perform some work that can take a varying amount of time
-  await doSomeWork()
+  // Do something that will take a random amount of time
+  await new Promise(r => setTimeout(r, Math.random() * 1000))
 
   // Wait for our ticket to be first in the queue
   await ticketQueue.waitForFirst(ticket)
 
   // Now we are first in the queue and can proceed with the next step
-  await sendMessage(name)
+  console.log(name)
   
-  // Once `sendMessage()` completes, we allow explicit resource management to dispose of the ticket, removing it from the queue and allowing the next ticket-holder to continue
+  // We allow explicit resource management to dispose of the ticket, removing it from the queue and allowing the next ticket-holder to continue
 }
 
 onEvent('A')
@@ -59,8 +59,7 @@ onEvent('B')
 onEvent('C')
 onEvent('D')
 
-// Every `onEvent()` can `doSomeWork()` in parallel without waiting on someone else
-// And no matter how long each `doSomeWork()` takes, the order of `sendMessage()` calls will be
+// No matter how long each `onEvent()` call takes, we will always log messages in this order:
 // A
 // B
 // C
@@ -115,9 +114,9 @@ async function stallsQueue() {
 
 ### Tickets time out by default to prevent queue stalling
 
-TicketQueues come with a 500ms timeout and 3 retries limit by default. If a ticket is at the front of the queue for 500ms without being removed, the TicketQueue automatically moves it to the back of the queue and moves onto the next ticket. The 4th time a ticket times out it is outright removed from the queue without being requeued. This prevents a single ticket never being removed from stalling the queue forever and multiple tickets never being removed making the queue slow.
+TicketQueues come with a 1000ms timeout and 3 retries limit by default. If a ticket is at the front of the queue for 1000ms without being removed, the TicketQueue automatically moves it to the back of the queue and moves onto the next ticket. The 4th time a ticket times out it is outright removed from the queue without being requeued. This prevents a single ticket never being removed from stalling the queue forever and multiple tickets never being removed making the queue slow.
 
-These limits are configurable if you need a different timeout window or no timeout at all. Beware that disabling the timeout feature will risk a single ticket stalling your queue for everyone, so make sure you always remove tickets (even on exceptions) and never take too long to remove them.
+These limits are configurable if you need a different timeout window or no timeout at all. Beware that disabling the timeout feature will risk a single ticket stalling your queue for everyone, so make sure you always remove tickets (even on exceptions) and never take too long to remove them. Note that timeouts under 1000ms may cause tickets to be requeued too quickly.
 
 ```typescript
 const ticketQueue = new TicketQueue({

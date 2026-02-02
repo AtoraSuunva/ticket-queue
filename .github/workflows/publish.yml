@@ -41,9 +41,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
       - run: pnpm install
       - run: pnpm build
-      - run: pnpm publish --provenance --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: pnpm publish
 
   publish-jsr:
     needs: lint-and-test

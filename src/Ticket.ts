@@ -1,4 +1,4 @@
-import type { TicketQueue } from './TicketQueue.js'
+import type { TicketQueue } from './TicketQueue.ts'
 
 /**
  * Ticket class represents a ticket in the TicketQueue.
@@ -12,9 +12,17 @@ import type { TicketQueue } from './TicketQueue.js'
  */
 export class Ticket implements Disposable {
   public readonly [Symbol.toStringTag] = 'Ticket'
+  /** If this ticket has been disposed by its TicketQueue */
   public disposed = false
+  /** The number of times this ticket has been requeued due to timeout */
   public retries = 0
 
+  /**
+   * Create a new Ticket associated with a TicketQueue.
+   * Creating a ticket manually does not add it to the queue. Use `TicketQueue.acquireTicket()` to get a ticket instead of creating one directly.
+   * @param ticketQueue The TicketQueue this ticket belongs to
+   * @param id The ID associated with this ticket
+   */
   constructor(
     public readonly ticketQueue: TicketQueue,
     public readonly id: bigint,
@@ -59,5 +67,10 @@ export class Ticket implements Disposable {
    */
   [Symbol.dispose]() {
     this.removeFromQueue('Explicit Resource Management')
+  }
+
+  /** Returns a string representation of the ticket. */
+  toString() {
+    return `Ticket #${this.id.toString()}`
   }
 }

@@ -12,6 +12,8 @@
     "target": "ESNext",
     "lib": ["ESNext"],
     "types": ["node"],
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
 
     /* Modules */
     "module": "Node16",

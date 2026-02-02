@@ -1,14 +1,19 @@
 import { EventEmitter } from 'tseep'
-import { Ticket } from './Ticket.js'
+import { Ticket } from './Ticket.ts'
 
+/**
+ * Options for configuring a TicketQueue.
+ */
 export interface TicketQueueOptions {
   /**
    * The timeout in milliseconds for how long a ticket can be first in queue before it is considered expired.
    *
    * If a ticket is the first in queue for longer than this timeout, it will be moved to the end of the queue.
    *
+   * Note that timeouts under 1000ms may cause tickets to be requeued more frequently than expected due to event loop delays and other factors.
+   *
    * If the ticketTimeout is set to 0, tickets will not expire and will remain in the queue until they are removed. This can lead to code that never redeems or disposes of a ticket stalling the entire queue indefinitely.
-   * @default 500
+   * @default 1000
    */
   ticketTimeout?: number
   /**
@@ -49,15 +54,23 @@ export class TicketQueue extends EventEmitter<{
   removeTicket(ticket: Ticket, reason?: string): void
 }> {
   public readonly [Symbol.toStringTag] = 'TicketQueue'
+  /** The queue of tickets in the order they were acquired */
   public queue: Ticket[] = []
+  /** The next ticket ID to be assigned */
   public ticketCount = 0n
 
+  /** The timeout in milliseconds for how long a ticket can be first in queue before it is considered expired. */
   public ticketTimeout: number
+  /** The number of times to requeue a ticket if it times out. */
   public ticketRetries: number
 
+  /**
+   * Create a new TicketQueue. See the class documentation for more info.
+   * @param options Options to create the TicketQueue with
+   */
   constructor(options: TicketQueueOptions = {}) {
     super()
-    this.ticketTimeout = options.ticketTimeout ?? 500
+    this.ticketTimeout = options.ticketTimeout ?? 1000
     this.ticketRetries = options.ticketRetries ?? 3
 
     if (this.ticketTimeout < 0) {
@@ -244,5 +257,10 @@ export class TicketQueue extends EventEmitter<{
    */
   getFirstTicket(): Ticket | null {
     return this.queue.length > 0 ? this.queue[0] : null
+  }
+
+  /** Returns a string representation of the ticket queue. */
+  override toString() {
+    return `TicketQueue (size=${this.queue.length}, tickets=[${this.queue.join(',')}])`
   }
 }

@@ -1,2 +1,2 @@
-export * from './Ticket.js'
-export * from './TicketQueue.js'
+export * from './Ticket.ts'
+export * from './TicketQueue.ts'
