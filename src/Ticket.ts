@@ -70,7 +70,7 @@ export class Ticket implements Disposable {
   }
 
   /** Returns a string representation of the ticket. */
-  toString() {
+  toString(): string {
     return `Ticket #${this.id.toString()}`
   }
 }

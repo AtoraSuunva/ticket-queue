@@ -260,7 +260,7 @@ export class TicketQueue extends EventEmitter<{
   }
 
   /** Returns a string representation of the ticket queue. */
-  override toString() {
+  override toString(): string {
     return `TicketQueue (size=${this.queue.length}, tickets=[${this.queue.join(',')}])`
   }
 }
